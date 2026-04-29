@@ -1,58 +1,72 @@
-TCP Port Scanner in Bash
-Questo repository contiene un semplice ma efficace Port Scanner TCP scritto in Bash. Lo script automatizza il test di un range di porte su un indirizzo IP specifico utilizzando il comando nc (NetCat).
+# Port Scanner TCP con Bash
 
-⚠️ Prerequisiti
-Prima di utilizzare lo script, assicurarsi che:
+## Descrizione
 
-Entrambe le macchine (VM) siano sulla stessa rete.
+Questo esercizio consiste nella creazione di uno **script Bash** per realizzare un semplice **Port Scanner TCP** utilizzando il comando `nc` di Netcat.
 
-Il firewall non blocchi il traffico (es. sudo ufw disable per test in ambiente controllato).
+Lo script prende in input:
 
-Il pacchetto netcat sia installato.
+- Indirizzo IP della VM target
+- Porta iniziale
+- Porta finale
 
-🛠️ Funzionalità
-Lo script segue un flusso logico rigoroso per garantire risultati affidabili:
+Successivamente controlla quali porte risultano aperte.
 
-Input Dinamico: Accetta IP, porta di inizio e porta di fine come argomenti.
+---
 
-Validazione parametri: Verifica che siano passati esattamente 3 argomenti.
+## Verifica connessione tra VM
 
-Controllo Range: Verifica che i numeri di porta siano compresi tra 0 e 65535.
+Per prima cosa è stata verificata la connessione tra le due VM con:
 
-Ping Test: Controlla se l'host di destinazione è raggiungibile prima di iniziare la scansione.
+```bash
+ping -c 2 IP_SECONDA_VM
 
-Scansione via Ciclo While: Itera attraverso il range di porte specificato.
 
-Analisi Exit Status: Utilizza $? per determinare se la porta è aperta o chiusa.
+Disattivazione firewall
+Per evitare conflitti durante i test, è stato disattivato il firewall:
+sudo ufw disable
 
-🚀 Come usare lo script
-1. Clonare il repository
 
-Bash
-git clone https://github.com/j3ynn/formazione_sou.git
-cd formazione_sou/Portscanner
-2. Dare i permessi di esecuzione
+Funzionamento dello script
+Lo script esegue questi passaggi:
 
-Bash
-chmod +x portscanner.sh
-3. Eseguire lo script
 
-Sintassi: ./portscanner.sh <IP_DESTINAZIONE> <PORTA_INIZIO> <PORTA_FINE>
+prende in input IP e range di porte
 
-Esempio:
+controlla che l’IP sia valido
 
-Bash
-./portscanner.sh 192.168.1.10 20 80
-🧪 Test di verifica (Manuale)
-Per verificare il corretto funzionamento dello scanner, puoi simulare un servizio in ascolto sulla VM di destinazione:
+controlla che il range di porte sia corretto
 
-Sulla VM Target (Destinazione):
-Apri una porta in ascolto (es. 8080):
+utilizza un ciclo while
 
-Bash
+testa le porte tramite nc
+
+verifica il risultato tramite exit status
+
+mostra le porte aperte
+
+Repository GitHub:
+https://github.com/j3ynn/formazione_sou/tree/main/Portscanner
+
+
+Test porta aperta
+Per testare lo scanner, sulla VM target è stata aperta la porta 8080 con:
 nc -l -p 8080
-Sulla VM Sorgente (Scanner):
-Esegui lo script includendo la porta 8080 nel range, oppure verifica manualmente:
+Poi è stata verificata dalla seconda VM con:
+nc -v -w 1 IP_SECONDA_VM 8080
+Se la connessione va a buon fine, significa che la porta 8080 è aperta.
 
-Bash
-nc -zv -w 1 192.168.1.10 8080
+
+Conclusione
+L’esercizio dimostra come:
+
+
+verificare la connessione tra due VM
+
+usare Netcat per controllare le porte TCP
+
+aprire una porta in ascolto
+
+leggere l’exit status di un comando
+
+automatizzare una scansione tramite script Bash
