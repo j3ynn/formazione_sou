@@ -9,7 +9,7 @@ echo 🍐 🍌 🍇 🍎
 #ciclo infinito che stampa frutta random dentro ad un file .txt
 while true
 do
-	NRANDOM=$(tr -dc '0-3' < /dev/urandom | head -c1)
+	NRANDOM=$(tr -dc '0-4' < /dev/urandom | head -c1)
 	if [ $NRANDOM -eq 0 ]; then
 		echo 🍎 >> frutta.txt
 	elif [ $NRANDOM -eq 1 ]; then
@@ -17,7 +17,9 @@ do
 	elif  [ $NRANDOM -eq 2 ]; then
 		echo 🍌 >> frutta.txt
 	elif [ $NRANDOM -eq 3 ]; then
-	       echo 🍇 >> frutta.txt	
+	       echo 🍇 >> frutta.txt
+       	elif [ $NRANDOM -eq 4 ]; then
+		echo "error frutto marcio" >> frutta.txt
 	fi
 	sleep 2
 done
