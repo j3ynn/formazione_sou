@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   # private_network perchè collega solo il tuo computer fisico alla macchina virtuale.
   config.vm.network "private_network", ip: "192.168.33.10"
   
-  # Configuriamo la RAM (2GB)
+  # Configuriamo la RAM (1GB)
   # Questa riga dice a Vagrant: "Tutto quello che scrivo qui dentro serve a configurare VirtualBox".
   config.vm.provider "virtualbox" do |vb|
     # Qui decidi quanta RAM del tuo computer fisico vuoi "prestare" alla macchina virtuale.
@@ -27,39 +27,3 @@ Vagrant.configure("2") do |config|
     vb.name = "PrimaVm"
   end
 end
-
-# 1. Aggiornamenti del Box
-# "Disabilita il controllo automatico degli aggiornamenti del box.
-# Se lo disabiliti, i box verranno controllati solo quando l'utente esegue vagrant box outdated. 
-# Non è raccomandato."
-
-# 2. Rete e Porte (Port Forwarding)
-# "Crea una mappatura delle porte inoltrate (forwarded port) 
-# che permette l'accesso a una specifica porta all'interno della macchina da una porta del computer ospitante (il tuo PC). 
-# Nell'esempio sotto, accedendo a 'localhost:8080' si accederà alla porta 80 della macchina virtuale."
-# Nota: Questo abilita l'accesso pubblico alla porta aperta.
-# "Crea una mappatura... e consenti l'accesso solo tramite 127.0.0.1 per disabilitare l'accesso pubblico."
-
-# 3. Tipi di Rete (Privata e Pubblica)
-# "Crea una rete privata, che permette l'accesso alla macchina 
-# solo dal computer ospitante (host-only) usando uno specifico IP."
-# "Crea una rete pubblica, che generalmente corrisponde a una rete a ponte (bridged). 
-# Le reti bridged fanno apparire la macchina come un altro dispositivo fisico sulla tua rete."
-
-# 4. Cartelle Condivise (Synced Folders)
-# "Condividi una cartella aggiuntiva con la VM ospite. 
-# Il primo argomento è il percorso sul PC reale, il secondo è il percorso sulla VM dove montare la cartella."
-# "Disabilita la condivisione predefinita della directory corrente. 
-# Farlo migliora l'isolamento tra il box Vagrant e il tuo PC, 
-# assicurando che il tuo Vagrantfile non sia accessibile alla macchina virtuale."
-
-# 5. Configurazione del Provider (VirtualBox)
-# "Configurazione specifica per il provider (motore di virtualizzazione) così puoi perfezionare vari aspetti. 
-# Esempio per VirtualBox:"
-# vb.gui = true: Mostra la finestra di VirtualBox all'avvio.
-# vb.memory = "1024": Personalizza la quantità di RAM.
-
-# 6. Provisioning (Installazione Automatica)
-# "Abilita il 'provisioning' con uno script shell. 
-# Sono disponibili anche altri strumenti come Ansible, Chef, Docker, Puppet e Salt."
-# Esempio nel codice: Aggiorna i pacchetti e installa il server web Apache automaticamente.
