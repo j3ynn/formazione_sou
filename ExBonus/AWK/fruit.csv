@@ -1,0 +1,5 @@
+apple,banana,strawbarry
+pear,peach,lemon
+banana,kiwi,orange
+
+"awk -F',' '/banana/ {print $3}' fruit.csv"

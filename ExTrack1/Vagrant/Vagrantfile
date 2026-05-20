@@ -1,0 +1,29 @@
+# Il comando Vagrant.configure("2") è fondamentale perché dice a Vagrant 
+# di usare le regole moderne (versione 2).
+Vagrant.configure("2") do |config|
+  
+  # Le opzioni di configurazione più comuni sono documentate e commentate qui sotto. 
+  # Per un riferimento completo, si prega di consultare 
+  # la documentazione online all'indirizzo https://docs.vagrantup.com.
+
+  # utiliziamo il comando per impostare un sistema operativo (ubuntu in questo caso)
+  config.vm.box = "ubuntu/focal64"
+
+  # Diamo un IP alla macchina per raggiungerla facilmente
+  # l'IP utilizzato è standard, in caso utilizzare 192.168.x.y 
+  # (dove x è un numero diverso da quello del tuo Wi-Fi, e y è un numero tra 2 e 254).
+  # private_network perchè collega solo il tuo computer fisico alla macchina virtuale.
+  config.vm.network "private_network", ip: "192.168.33.10"
+  
+  # Configuriamo la RAM (1GB)
+  # Questa riga dice a Vagrant: "Tutto quello che scrivo qui dentro serve a configurare VirtualBox".
+  config.vm.provider "virtualbox" do |vb|
+    # Qui decidi quanta RAM del tuo computer fisico vuoi "prestare" alla macchina virtuale.
+    # il valore è in Megabyte (2048 = 2 Gigabyte)
+    vb.memory = "1024"
+    # impostiamo una cpu
+    vb.cpus = "1"
+    # nome VM
+    vb.name = "PrimaVm"
+  end
+end

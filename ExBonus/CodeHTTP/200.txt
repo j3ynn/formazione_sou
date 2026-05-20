@@ -1,0 +1,11 @@
+# http status code 200
+
+HTTP/1.1 200 OK
+Date: Tue, 12 May 2026 13:35:21 GMT
+Server: Apache/2.4.64 (Ubuntu)
+Last-Modified: Tue, 21 Apr 2026 14:26:28 GMT
+ETag: "d-64ff93369aeef"
+Accept-Ranges: bytes
+Content-Length: 13
+Content-Type: text/html
+

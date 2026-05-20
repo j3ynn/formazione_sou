@@ -1,0 +1,30 @@
+# http status code 401
+
+HTTP/1.1 401 Unauthorized
+Date: Wed, 13 May 2026 08:40:29 GMT
+Server: Apache/2.4.64 (Ubuntu)
+WWW-Authenticate: Basic realm="Attendo credenziali"
+Content-Type: text/html; charset=iso-8859-1
+
+# 000-default.conf 
+
+<VirtualHost *:80>
+
+	ServerAlias www.sitovecchio.com
+	ServerAdmin webmaster@localhost
+	DocumentRoot /var/www/html
+	
+	# autenticazione http basic, utente e password validi in .htpasswd
+
+	<Directory "/var/www/html/area-privata">
+        AuthType Basic
+        AuthName "Attendo credenziali"
+        AuthUserFile /etc/apache2/.htpasswd
+        Require valid-user
+        </Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+

@@ -1,0 +1,34 @@
+# http status code 500
+
+HTTP/1.1 500 Internal Server Error
+Date: Wed, 13 May 2026 09:39:15 GMT
+Server: Apache/2.4.64 (Ubuntu)
+Connection: close
+Content-Type: text/html; charset=iso-8859-1
+
+# 000-default.conf 
+
+<VirtualHost *:80>
+
+        ServerAlias www.sitovecchio.com
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html
+
+	# gli dico di leggere pure i file nascosti
+
+        <Directory /var/www/html>
+        AllowOverride All
+        </Directory>
+
+        <Directory "/var/www/html/area-privata">
+        AuthType Basic
+        AuthName "Attendo credenziali"
+        AuthUserFile /etc/apache2/.htpasswd
+        Require valid-user
+        </Directory>
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+
