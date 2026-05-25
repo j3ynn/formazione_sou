@@ -36,7 +36,7 @@ Each turn, a player selects a position from 1 to 9:
 
 A cell cannot be selected if it is already occupied.
 The first player to complete a row, column, or diagonal wins.
-If all cells are filled without a winner, the game ends in a draw.
+If all cells are filled without a winner the game ends in a draw.
 
 ## Architecture
 
