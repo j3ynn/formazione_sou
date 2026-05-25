@@ -22,23 +22,31 @@ Make the script executable:
 chmod +x tris.sh
 Run the game:
 ./tris.sh
-Game Rules
+
+## Game Rules
+
 Two players: X and O
 Each turn, a player selects a position from 1 to 9:
+
 1 | 2 | 3
 ---------
 4 | 5 | 6
 ---------
 7 | 8 | 9
+
 A cell cannot be selected if it is already occupied.
 The first player to complete a row, column, or diagonal wins.
 If all cells are filled without a winner, the game ends in a draw.
-Architecture
+
+## Architecture
+
 9 Docker containers (cells1 ... cells9)
 Each container contains a file:
 /stato.txt -> cell state (-, X, O)
 Communication between the script and containers is handled using docker exec.
-Game Flow
+
+## Game Flow
+
 The program handles:
 Input validation (numbers from 1 to 9)
 Cell occupation check
@@ -46,5 +54,7 @@ State update
 Win condition check
 Draw condition check
 Turn alternation
-Cleanup
+
+## Cleanup
+
 At the end of execution, all containers are automatically stopped and removed.
