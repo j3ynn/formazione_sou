@@ -1,0 +1,27 @@
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "bento/rockylinux-9"
+
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
+
+  config.vm.network "forwarded_port", guest: 50000, host: 50000
+
+  config.vm.provider "virtualbox" do |vb|
+    
+    vb.memory = "2048"
+    
+    vb.cpus = "2"
+    
+    vb.name = "Macchinina"
+  end
+
+  # utilizza ansible come tool per configurarla
+  config.vm.provision "ansible" do |ansible|
+
+    # file da eseguire 
+    ansible.playbook = "Playbook.yml"
+  end
+
+end
+

@@ -1,0 +1,74 @@
+---
+
+- name: installazione Docker 
+  hosts: all # applichi le task su tutte le macchine 
+  become: true # per eseguire il playbook con i permessi di amministratote (root)
+
+  tasks:
+    - name: aggiorna pacchetti 
+      ansible.builtin.dnf: # usa il modulo dnf per installare i pacchetti su rocky 
+        name: "*" # name è il pacchetto da cercare, ma con "*" li aggiorniamo tutti
+        state: latest # per portare i pacchetti all'ultima versione
+
+    - name: importa chiave GPG Docker # senza questa non funziona poichè l'url dice dove si trova la chiave ma non la importa 
+      ansible.builtin.rpm_key:
+        key: https://download.docker.com/linux/rhel/gpg # url della chiave GPG ufficiale Docker
+        state: present # lo installiamo, ma se c'è già non fa nulla
+
+    - name: repository Docker
+      ansible.builtin.get_url: # scarica un file tramite url (come fare curl)
+        url: https://download.docker.com/linux/rhel/docker-ce.repo # indirizzo ufficiale docker per scaricare la repo 
+        dest: /etc/yum.repos.d/docker-ce.repo # dove collocarlo all' interno della VM
+   
+    - name: installa Docker
+      ansible.builtin.dnf:
+        name: 
+          - docker-ce 
+          - docker-ce-cli # comando docker
+          - containerd.io # esegue i container
+        state: present # lo installiamo, ma se c'è già non fa nulla
+        
+    - name: avvia Docker
+      ansible.builtin.service: # getisce i servizi di sistema in background 
+        name: docker # nome servizio da avviare
+        state: started # stato del servizio, started, stopped, restarted e reloaded.
+        enabled: true # per avviarlo automaticamente al reboot, boolean o true o false 
+
+
+# task per creare una rete Docker, per far comunicare i container all'interno della VM
+    - name: creazione Docker Network
+      community.docker.docker_network:
+        name: rete
+        driver: bridge # tipo di rete
+        ipam_config:
+          - subnet: 192.168.100.0/24
+        
+
+# crea un container Docker con Jenkins dentro utilizzando un immagine jenkins per docker, collegato alla mia rete con IP fisso
+# Master
+    - name: creazione container Docker con Jenkins
+      community.docker.docker_container:
+        name: ContainerJenkins 
+        image: jenkins/jenkins:latest # immagine jenkins per docker
+        state: started
+        ports: 
+          - 8080:8080 # porta per master 
+          - 50000:50000 # porta per far comunicare master con agent 
+        networks:
+          - name: rete
+            ipv4_address: 192.168.100.10
+
+
+# Agent
+    - name: creazione container Docker con Jenkins Agent 
+      community.docker.docker_container:
+        name: ContainerAgent
+        image: jenkins/inbound-agent:latest # immagine Jenkins Agent per docker
+        state: started 
+        networks: 
+          - name: rete
+            ipv4_address: 192.168.100.11
+        env:
+          JENKINS_URL: "http://192.168.100.10:8080" # variabile, serve a dire all'agent dove si trova il master
+          JENKINS_AGENT_NAME: "agent1" # variabile, serve a dire il nome con cui si presenta il master 
+          JENKINS_SECRET: "" # variabile, token segreto che genera jenkins per autenticarsi 
