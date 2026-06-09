@@ -4,12 +4,15 @@ This repository documents my journey through a DevOps training program. It conta
 
 We focus on: shell scripting, Docker, containerization, automation, container orchestration, and much more as the course progresses.
 
----
-
 ## Repository Structure
 
-### track/
+```
+ExTrack1/
 Main course exercises. Each folder corresponds to a specific topic or training week covered during the program.
 
-### bonus/
+ExTrack2/
+Exercises focused on Kubernetes, Jenkins, Ansible and Vagrant. Each folder corresponds to a specific topic or training week covered during the program.
+
+ExBonus/
 Extra exercises assigned by the tutors outside the main track, designed to go beyond what is covered during the course — a good place to see experimentation and problem-solving skills, both guided and independent.
+```
