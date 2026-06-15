@@ -44,8 +44,25 @@
           - subnet: 192.168.100.0/24
         
 
+# file speciale su Linux che permette a due programmi di comunicare tra loro sia sulla stessa macchina sia su dispositivi diversi
+    - name: permessi socket Docker 
+      file: 
+        path: /var/run/docker.sock # percorso del file
+        mode: 0777 # permessi dove tutti possono leggere e scrivere (es chmod 777 ...)
+        group: docker
+
+
+# crea cartella dentro al containerjenkins con tutti i permessi 
+    - name: Crea cartella Jenkins home
+      ansible.builtin.file:
+        path: /var/jenkins_home
+        state: directory
+        owner: "1000" # 1000 è l'UID dell'utente jenkins dentro al container
+        group: "1000"
+        mode: "0755"
+
 # crea un container Docker con Jenkins dentro utilizzando un immagine jenkins per docker, collegato alla mia rete con IP fisso
-# Master
+# Master esegue la pipeline
     - name: creazione container Docker con Jenkins
       community.docker.docker_container:
         name: ContainerJenkins 
@@ -57,7 +74,28 @@
         networks:
           - name: rete
             ipv4_address: 192.168.100.10
+        volumes:
+          - /var/jenkins_home:/var/jenkins_home
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /usr/bin/docker:/usr/bin/docker # socket di Docker è il file con cui i programmi comunicano con il demone Docker sulla VM.
 
+    - name: modifica GID gruppo docker dentro ContainerJenkins
+      community.docker.docker_container_exec:
+        container: ContainerJenkins
+        command: "groupmod -g 989 docker"
+        user: "0"
+
+    - name: aggiungi utente jenkins al gruppo docker dentro ContainerJenkins
+      community.docker.docker_container_exec:
+        container: ContainerJenkins
+        command: "usermod -aG docker jenkins"
+        user: "0"
+
+    - name: riavvia ContainerJenkins
+      community.docker.docker_container:
+        name: ContainerJenkins
+        state: started
+        restart: true
 
 # Agent
     - name: creazione container Docker con Jenkins Agent 

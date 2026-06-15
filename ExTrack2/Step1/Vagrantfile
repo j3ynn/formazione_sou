@@ -21,7 +21,10 @@ Vagrant.configure("2") do |config|
 
     # file da eseguire 
     ansible.playbook = "Playbook.yml"
+    
   end
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true
 
 end
 
