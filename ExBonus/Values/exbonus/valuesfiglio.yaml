@@ -1,0 +1,3 @@
+ # all'interno solo i valori da sovrascrivere all momento dell'install
+
+ replicaCount: 2
