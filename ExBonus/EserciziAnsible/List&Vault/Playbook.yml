@@ -1,0 +1,26 @@
+---
+
+- hosts: all # Il playbook verrà eseguito su tutti gli host definiti nell'inventory.ini
+  become: yes # esegue con i permessi amministratore sudo
+  vars_files:
+    - secrets.yml
+  vars: # variabile chiamata packages (dizionario, sono coppie chiave-valore)
+    packages:
+      nginx: present
+      httpd: absent
+      python3.9: present
+      tree: present
+
+  tasks:
+    - name: gestisci pacchetti secondo il dizionario 
+      dnf:
+        name: "{{ item.key }}" # nome del pacchetto (es. nginx)
+        state: "{{ item.value }}" # stato desiderato del pacchetto (es. installa)
+      loop: "{{ packages | dict2items }}" # ripete la tesk per ogni elemento del dizionario
+
+    - name: crea l'utente fabio
+      user:
+        name: fabio_tozzi
+        password: "{{ fabio_tozzi | password_hash('sha512') }}"
+        shell: /bin/bash
+        state: present
