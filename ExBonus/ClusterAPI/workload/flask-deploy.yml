@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-hello-world  # nome del Deployment
+spec:
+  replicas: 1  # quante copie (Pod) dell'app vogliamo far girare
+  selector:
+    matchLabels:
+      app: flask-hello-world  # il Deployment gestisce i Pod che hanno questa label
+  template:  # il "modello" con cui vengono creati i Pod
+    metadata:
+      labels:
+        app: flask-hello-world  # label applicata ai Pod, deve combaciare col selector sopra
+    spec:
+      containers:
+        - name: flask-hello-world
+          image: j3ynn/flask-hello-world:latest  # immagine da Docker Hub
+          ports:
+            - containerPort: 8000  # la porta su cui ascolta Flask dentro il container (vedi app.run port=8000)
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-hello-world-svc  # nome del Service
+spec:
+  selector:
+    app: flask-hello-world  # il Service instrada il traffico ai Pod con questa label
+  ports:
+    - port: 80          # porta esposta dal Service
+      targetPort: 8000  # porta su cui il container ascolta realmente
+  type: NodePort  # espone il servizio su una porta del nodo, così ci puoi accedere da fuori il cluster
