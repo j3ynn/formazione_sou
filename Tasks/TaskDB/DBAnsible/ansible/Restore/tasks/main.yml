@@ -1,0 +1,7 @@
+
+---
+# tasks file for Restore
+
+- name: restore 
+  ansible.builtin.shell:
+    cmd: mariadb < /tmp/database.sql

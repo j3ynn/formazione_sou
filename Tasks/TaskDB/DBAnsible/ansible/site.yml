@@ -1,0 +1,15 @@
+---
+
+- name: applica il role Backup sulla VM source
+  hosts: db
+  become: true
+  vars_files:
+    - Backup/vars/vault.yml
+  roles:
+    - Backup
+
+- name: applica il ruolo Restore sulla seconda VM
+  hosts: dbTow
+  become: true
+  roles:
+    - Restore
